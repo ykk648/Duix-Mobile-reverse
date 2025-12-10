@@ -1,0 +1,15 @@
+# DUIX Model Reverse Engineering
+# Python 3.8+
+
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.20.0
+
+# For model decryption
+pycryptodome>=3.18.0
+
+# Optional: for image processing
+# pillow>=9.0.0
+# opencv-python>=4.5.0
+
