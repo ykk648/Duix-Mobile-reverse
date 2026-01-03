@@ -48,7 +48,10 @@ def find_class_files(extract_dir):
     return sorted(class_files)
 
 def main():
-    jar_path = "Duix-Mobile/duix-android/dh_aigc_android/duix-sdk/libs/resource_loader.jar"
+    # 默认路径：相对于项目根目录
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.dirname(os.path.dirname(script_dir))
+    jar_path = os.path.join(repo_root, "duix-android/dh_aigc_android/duix-sdk/libs/resource_loader.jar")
     output_dir = "/tmp/resource_loader_decompiled"
     
     if len(sys.argv) > 1:
