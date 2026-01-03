@@ -9,6 +9,11 @@ numpy>=1.20.0
 # For model decryption
 pycryptodome>=3.18.0
 
+# For audio feature extraction (WeNet ONNX inference)
+onnxruntime>=1.15.0
+librosa>=0.10.0
+soundfile>=0.12.0
+
 # Optional: for image processing
 # pillow>=9.0.0
 # opencv-python>=4.5.0

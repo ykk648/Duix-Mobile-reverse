@@ -6,7 +6,8 @@
 
 | 文件 | 描述 |
 |------|------|
-| `decrypt_model.py` | NCNN 模型文件解密工具 |
+| `decrypt_model.py` | NCNN 模型文件解密工具（dh_model.p/b, config.j, bbox.j） |
+| `decrypt_wenet.py` | WeNet ONNX 模型解密工具 |
 
 ---
 

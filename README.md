@@ -54,7 +54,8 @@ duix-heygen-reverse/
 │   └── ncnn_inference_analysis.md      # NCNN 推理流程分析
 │
 └── examples/                           # 💡 使用示例
-    └── inference.py                    # 推理示例代码
+    ├── inference.py                    # PyTorch 模型推理示例
+    └── audio_inference.py              # 音频特征提取推理示例
 ```
 
 ---
@@ -66,6 +67,7 @@ duix-heygen-reverse/
 ```bash
 pip install torch torchvision numpy
 pip install pycryptodome  # 用于模型解密
+pip install onnxruntime librosa soundfile  # 用于音频特征提取
 ```
 
 ### 基础使用
@@ -90,12 +92,22 @@ print(f"输出形状: {output.shape}")    # torch.Size([1, 3, 160, 160])
 print(f"输出范围: [{output.min():.2f}, {output.max():.2f}]")  # [-1, 1]
 ```
 
-### 解密 NCNN 模型
+### 解密模型文件
 
 ```bash
-# 解密模型文件
+# 解密 NCNN 模型文件
 python tools/decrypt_model.py path/to/dh_model.p decrypted_model.param
 python tools/decrypt_model.py path/to/dh_model.b decrypted_model.bin
+
+# 解密 WeNet ONNX 模型文件
+python tools/decrypt_wenet.py path/to/encrypted_wenet.onnx wenet.onnx
+```
+
+### 音频特征提取
+
+```bash
+# 使用解密后的 WeNet 模型提取音频特征
+python examples/audio_inference.py wenet.onnx audio.wav output_bnf.npy
 ```
 
 ---
@@ -190,6 +202,7 @@ python tools/decrypt_model.py path/to/dh_model.b decrypted_model.bin
 | `dh_model.b` | 模型权重 (.bin) |
 | `config.j` | 配置文件 |
 | `bbox.j` | 边界框配置 |
+| `wenet.onnx` | WeNet 音频特征提取模型（ONNX 格式） |
 
 ### 解密方法
 
@@ -232,6 +245,7 @@ char* aiv = "yymrjzbwyrbjszrk";
 | [模型结构分析](docs/model_structure_analysis.md) | NCNN 模型逐层解析 |
 | [加密机制分析](docs/encryption_analysis.md) | AES 加密破解过程 |
 | [推理流程分析](docs/ncnn_inference_analysis.md) | NCNN 推理代码分析 |
+| [音频特征提取](docs/audio_feature_extraction.md) | WeNet ONNX 音频特征提取 |
 
 ---
 
@@ -266,10 +280,12 @@ MIT License - 详见 [LICENSE](LICENSE)
 
 ### 可以做的事情
 
-- [ ] 完善权重转换脚本（NCNN → PyTorch）
-- [ ] 添加更多推理示例
+- [x] 完善权重转换脚本（NCNN → PyTorch）
+- [x] 添加音频特征提取推理示例
+- [x] 添加 WeNet ONNX 模型解密工具
 - [ ] 优化参数量到与原版一致
 - [ ] 添加训练代码
+- [ ] 添加完整的端到端推理流程示例
 
 ---
 
