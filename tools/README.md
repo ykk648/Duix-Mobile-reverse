@@ -45,7 +45,7 @@ DUIX 模型目录中的加密文件：
 | `dh_model.p` | NCNN 网络结构 (.param) |
 | `dh_model.b` | NCNN 模型权重 (.bin) |
 | `config.j` | JSON 配置文件 |
-| `bbox.j` | 边界框配置 |
+| `bbox.j` | 边界框配置（格式: [x1, x2, y1, y2]） |
 
 ### 加密参数
 

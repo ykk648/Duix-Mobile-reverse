@@ -89,7 +89,14 @@ public static ModelInfo load(Context context, Object decryptor, String path1, St
    - `rawPath`: 原始图片路径
    - `maskPath`: 如果 `hasMask=true`，从 `pha` 目录查找对应的 mask 文件
    - `sgPath`: 如果 `hasMask=true`，从 `raw_sg` 目录查找对应的文件
-   - `rect`: 从 `bbox.j` JSON 中根据 index 获取边界框 `[x, y, w, h]`
+   - `rect`: 从 `bbox.j` JSON 中根据 index 获取边界框 `[x1, x2, y1, y2]`
+
+3. **人脸处理流程**（从Frame到模型输入）：
+   - **Step 1**: 使用 `rect` 从原始图像中裁剪人脸区域（约276×276px）
+   - **Step 2**: 将裁剪的人脸 `resize` 到 168×168 像素
+   - **Step 3**: 从168×168图像中心裁剪160×160区域（坐标(4,4)到(164,164)）
+   - **Step 4**: 创建mask图像（在160×160基础上绘制黑色矩形遮挡部分区域）
+   - **Step 5**: 合并真实图像和mask为6通道输入，送入模型推理
 3. 验证每个 Frame（调用 `check()` 方法）：
    - 必须有 `rawPath`
    - 必须有 `rect`
@@ -241,11 +248,16 @@ public static ModelInfo load(Context context, Object decryptor, String path1, St
 #### bbox.j
 ```json
 {
-  "0": [x, y, w, h],  // 帧索引 -> 边界框
-  "1": [x, y, w, h],
+  "0": [x1, x2, y1, y2],  // 帧索引 -> 边界框 [水平边界, 垂直边界]
+  "1": [x1, x2, y1, y2],   // ⚠️ 注意: 非标准的坐标格式
   ...
 }
 ```
+
+**格式说明**:
+- `x1, x2`: 水平方向的边界坐标
+- `y1, y2`: 垂直方向的边界坐标
+- **⚠️ 重要**: 这不是标准的 `[x, y, w, h]` 或 `[x1, y1, x2, y2]` 格式
 
 #### SpecialAction.json
 ```json
