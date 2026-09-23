@@ -8,8 +8,8 @@ NCNN 模型加密脚本
     python encrypt_ncnn_model.py <input_file> <output_file>
     
 示例:
-    python encrypt_ncnn_model.py mobilenetv5_unet_wenet.ncnn.bin mobilenetv5_unet_wenet.ncnn.bin.encrypted
-    python encrypt_ncnn_model.py mobilenetv5_unet_wenet.ncnn.param dh_model.p
+    python encrypt_ncnn_model.py model.ncnn.bin model.ncnn.bin.encrypted
+    python encrypt_ncnn_model.py model.ncnn.param dh_model.p
 """
 
 import sys
@@ -78,9 +78,9 @@ def main():
         print("用法: python encrypt_ncnn_model.py <input_file> <output_file>")
         print("\n示例:")
         print("  # 加密 bin 文件")
-        print("  python encrypt_ncnn_model.py mobilenetv5_unet_wenet.ncnn.bin dh_model.b")
+        print("  python encrypt_ncnn_model.py model.ncnn.bin dh_model.b")
         print("\n  # 加密 param 文件")
-        print("  python encrypt_ncnn_model.py mobilenetv5_unet_wenet.ncnn.param dh_model.p")
+        print("  python encrypt_ncnn_model.py model.ncnn.param dh_model.p")
         print("\n  # 加密配置文件")
         print("  python encrypt_ncnn_model.py config.json config.j")
         sys.exit(1)

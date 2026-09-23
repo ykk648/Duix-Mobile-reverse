@@ -20,7 +20,7 @@
 |------|------|
 | **模型解密** | 破解 AES-128-CBC 加密的模型文件 |
 | **结构分析** | 完整解析 MobileNetV2 + U-Net 架构 |
-| **PyTorch 复现** | 95% 结构一致性的 PyTorch 实现 |
+| **PyTorch 复现** | 基于解密 NCNN graph 的逐层 PyTorch 实现 |
 | **推理复现** | 音频驱动人脸生成的完整流程 |
 
 ### 🔍 发现
@@ -28,7 +28,7 @@
 - **模型架构**: MobileNetV2 编码器 + U-Net 解码器
 - **双输入单输出**: 音频特征 + 6通道人脸图像 → 生成图像
 - **加密方式**: AES-128-CBC，密钥硬编码在 JNI 代码中
-- **参数量**: ~3.77M（轻量级设计）
+- **参数量**: ~7.54M 个 FP16 权重（`dh_model.b` 约 15.1MB）
 
 ---
 
@@ -59,6 +59,9 @@ duix-heygen-reverse/
     ├── inference.py                    # PyTorch 模型推理示例
     └── audio_inference.py              # 音频特征提取推理示例
 ```
+
+165 层 NCNN 权重转换和多模型参数平均见
+[`docs/ncnn_to_pytorch.md`](docs/ncnn_to_pytorch.md)。
 
 ---
 
@@ -181,7 +184,7 @@ python examples/audio_inference.py wenet.onnx audio.wav output_bnf.npy
 | Audio Encoder | 8层 Conv + Residual | ~0.55M |
 | Image Encoder | MobileNetV2 Backbone | ~1.92M |
 | U-Net Decoder | 5级跳跃连接 + InvertedResidual | ~2.06M |
-| **总计** | - | **~4.53M** |
+| **总计** | - | **~7.51M（PyTorch）** |
 
 ---
 
@@ -229,14 +232,15 @@ char* aiv = "yymrjzbwyrbjszrk";
 | 输入形状 | audio(256×20) + face(6×H×W) | ✅ 相同 | ✅ |
 | 输出形状 | 3×H×W | ✅ 相同 | ✅ |
 | 输出激活 | TanH [-1, 1] | ✅ TanH [-1, 1] | ✅ |
-| 参数量 | 3.77M | 4.53M (+20%) | ⚠️ |
+| 参数量 | 约 7.54M FP16 权重 | 约 7.51M PyTorch 权重 | ✅ |
 | 归一化 | GroupNorm | BatchNorm (可选) | ⚠️ |
-| 结构一致性 | 100% | ~95% | ✅ |
+| 结构一致性 | 100% | 以解密 `dh_model.p` 为基准 | ✅ |
 
-### 参数量差异原因
+### 参数量说明
 
-- 解码器使用 `expand_ratio=6` 的 InvertedResidual
-- 可通过调整 `expand_ratio` 降低参数量
+`dh_model.b` 是 FP16 权重文件，因此文件大小除以 2 才是权重个数；此前按
+float32 除 4 得出的 3.77M 是误读。当前 PyTorch 复现为约 7.51M 个参数，
+与官方权重文件的约 7.54M 个 FP16 权重相符。
 
 ---
 
@@ -294,4 +298,3 @@ MIT License - 详见 [LICENSE](LICENSE)
 <p align="center">
   <b>⭐ 如果这个项目对你有帮助，请给个 Star！</b>
 </p>
-

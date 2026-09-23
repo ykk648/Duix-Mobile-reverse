@@ -37,7 +37,7 @@ print(f"范围: [{output.min():.2f}, {output.max():.2f}]")  # [-1, 1]
 | Image Encoder (MobileNetV2) | 1.92M |
 | Audio Encoder | 0.55M |
 | U-Net Decoder | 2.06M |
-| **总计** | **4.53M** |
+| **总计** | **约 7.51M（PyTorch；官方约 7.54M FP16 权重）** |
 
 ## ✅ 模型特点
 
@@ -45,8 +45,8 @@ print(f"范围: [{output.min():.2f}, {output.max():.2f}]")  # [-1, 1]
 
 - ✅ 输出激活函数正确 (TanH)
 - ✅ 音频编码器完整 (8层)
-- ✅ 结构与 NCNN 对齐 (~95%)
-- ✅ 可直接用于训练/推理
+- ✅ 按解密后的 `dh_model.p` 对齐音频、图像、解码器和 GroupNorm
+- ✅ 可直接用于推理和进一步研究
 
 ## 🔧 配置选项
 
@@ -117,11 +117,10 @@ Output shape: torch.Size([1, 3, 160, 160])
 Output range: [-0.35, 0.42]
 Expected range: [-1, 1] (TanH)
 
-Total parameters: 4.53M
-Expected: ~3.77M (NCNN model)
+Total parameters: ~7.51M (PyTorch)
+NCNN weight file: ~15.1 MB FP16 (约 7.54M 权重)
 
 ==================================================
 ✅ 模型测试完成
 ==================================================
 ```
-

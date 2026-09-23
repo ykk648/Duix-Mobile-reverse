@@ -38,6 +38,11 @@ venv.bak/
 # NCNN models
 *.param
 *.bin
+download/*.zip
+download/*_unpacked/
+
+# Locally generated converted checkpoints
+checkpoints/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -63,4 +68,3 @@ logs/
 tmp/
 temp/
 *.tmp
-

@@ -142,10 +142,10 @@ pip install pycryptodome
 
 ```bash
 # 加密 bin 文件（模型权重）
-python encrypt_ncnn_model.py mobilenetv5_unet_wenet.ncnn.bin dh_model.b
+python encrypt_ncnn_model.py model.ncnn.bin dh_model.b
 
 # 加密 param 文件（网络结构）
-python encrypt_ncnn_model.py mobilenetv5_unet_wenet.ncnn.param dh_model.p
+python encrypt_ncnn_model.py model.ncnn.param dh_model.p
 
 # 加密配置文件
 python encrypt_ncnn_model.py config.json config.j
